@@ -3,7 +3,7 @@ import React from 'react'
 
 export default function Main({ children }) {
   return (
-    <Box sx={{ paddingTop: "50px" }}>
+    <Box>
       {children}
     </Box>
   )
