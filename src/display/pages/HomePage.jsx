@@ -1,39 +1,10 @@
 import React, { useState } from 'react';
 import { Box } from '@mui/material';
+import InputBox from '../../helpers/inputBox';
 
-const getHebrewDates = () => {
-    const hebrewDays = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת"];
-    const today = new Date();
-    let daysArray = [];
-
-    for (let i = 0; i < 10; i++) {
-        let newDate = new Date();
-        newDate.setDate(today.getDate() + i);
-        const dayOfWeek = hebrewDays[newDate.getDay()]; // Hebrew day name
-        const formattedDate = newDate.toLocaleDateString('he-IL'); // Format in Hebrew
-
-        daysArray.push({ day: dayOfWeek, date: formattedDate });
-    }
-
-    return daysArray;
-};
-
-// Generate time slots excluding 14:00-16:00
-const getTimeSlots = () => {
-    let slots = [];
-    for (let hour = 10; hour <= 17; hour++) {
-        for (let minute = 0; minute < 60; minute += 20) {
-            if (hour === 14 || hour === 15) continue;
-            slots.push(`${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`);
-        }
-    }
-    return slots;
-};
-
-export default function HomePage() {
-    const dates = getHebrewDates();
-    const timeSlots = getTimeSlots();
+export default function HomePage({ dates, timeSlots }) {
     const [selectedDate, setSelectedDate] = useState(null);
+    const [isOpen, setIsOpen] = useState(false);
 
     return (
         <Box
@@ -42,7 +13,8 @@ export default function HomePage() {
                 flexDirection: 'column',
                 alignItems: 'center',
                 backgroundColor: 'rgba(42,41,41,255)',
-                padding: '20px',
+                px: { xs: 2, sm: 4, md: 6 },
+                py: { xs: 3, sm: 5, md: 6 },
                 minHeight: '100vh',
             }}
         >
@@ -54,46 +26,61 @@ export default function HomePage() {
                         backgroundColor: '#4a4a4a',
                         color: '#fff',
                         borderRadius: '10px',
-                        padding: '12px',
-                        margin: '8px',
-                        width: '60%',
+                        py: { xs: 1.5, sm: 2 },
+                        px: { xs: 2, sm: 3 },
+                        m: { xs: 1.5, sm: 2 },
+                        width: { xs: '90%', sm: '90%', md: '70%', lg: '60%', xl: '50%' },
                         textAlign: 'center',
                         fontFamily: '"Poppins", sans-serif',
-                        fontSize: '18px',
-                        fontWeight: '500',
+                        fontSize: { xs: '16px', sm: '18px', md: '20px' },
+                        fontWeight: 500,
                         transition: 'all 0.3s ease-in-out',
                         cursor: 'pointer',
                         '&:hover': {
                             backgroundColor: '#5a5a5a',
-                            transform: 'scale(1.05)',
+                            transform: 'scale(1.03)',
                         },
                     }}
                 >
                     {item.day} - {item.date}
 
-                    {/* Animated time slots */}
                     <Box
                         sx={{
                             maxHeight: selectedDate === index ? '500px' : '0px',
                             overflow: 'hidden',
                             transition: 'max-height 0.3s ease-in-out',
-                            marginTop: selectedDate === index ? '10px' : '0px',
+                            mt: selectedDate === index ? 2 : 0,
                         }}
                     >
                         {selectedDate === index && (
-                            <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    flexWrap: 'wrap',
+                                    justifyContent: 'center',
+                                    gap: { xs: 1, sm: 2 },
+                                }}
+                            >
                                 {timeSlots.map((time, i) => (
                                     <Box
+                                        onClick={(e) => {
+                                            e.stopPropagation(); // Prevents triggering the date collapse
+                                            setIsOpen(true);
+                                        }}
                                         key={i}
                                         sx={{
                                             backgroundColor: '#6a6a6a',
                                             color: '#fff',
                                             borderRadius: '6px',
-                                            padding: '8px',
-                                            margin: '5px',
+                                            py: 1,
+                                            px: 2,
                                             cursor: 'pointer',
                                             transition: '0.3s ease-in-out',
-                                            '&:hover': { backgroundColor: '#7a7a7a', transform: 'scale(1.05)' },
+                                            fontSize: { xs: '14px', sm: '16px' },
+                                            '&:hover': {
+                                                backgroundColor: '#7a7a7a',
+                                                transform: 'scale(1.05)',
+                                            },
                                         }}
                                     >
                                         {time}
@@ -104,6 +91,40 @@ export default function HomePage() {
                     </Box>
                 </Box>
             ))}
+
+            {isOpen && (
+                <Box
+                    sx={{
+                        position: 'fixed',
+                        top: 0,
+                        left: 0,
+                        width: '100vw',
+                        height: '100vh',
+                        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        margin: "auto",
+                        zIndex: 1300,
+                        px: 2,
+                    }}
+                >
+                    <Box
+                        sx={{
+                            width: { xs: '100%', sm: '80%', md: '60%', lg: '40%', xl: '30%' },
+                            maxWidth: '500px',
+                            backgroundColor: 'transparent',
+                            borderRadius: 2,
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: 'center',
+                            p: 3,
+                        }}
+                    >
+                        <Box sx={{ height: "20%" }}></Box>
+                        <InputBox setIsOpen={setIsOpen} onClose={() => setIsOpen(false)} />
+                    </Box>
+                </Box>
+            )}
         </Box>
     );
 }

@@ -13,6 +13,7 @@ const Header = () => {
         padding: '16px',
         height: '60px',
         overflow: 'hidden',
+
       }}
     >
       {/* Empty box for left spacing (if needed) */}
