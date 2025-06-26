@@ -1,19 +1,22 @@
 ﻿import React from 'react';
-import { Box, IconButton } from '@mui/material';
+import { Box, IconButton, Typography } from '@mui/material';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
 const Header = () => {
   return (
     <Box
       sx={{
+        position: 'relative',
         display: 'flex',
-        justifyContent: 'space-between', // Ensures proper spacing
+        justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgba(37,36,36,255)',
+        background: 'linear-gradient(90deg, #fff 80%, #eaf3ff 100%)',
         padding: '16px',
-        height: '60px',
+        height: '64px',
         overflow: 'hidden',
-
+        boxShadow: '0 4px 16px 0 rgba(25, 118, 210, 0.07)',
+        borderBottom: '1.5px solid #e3eaf5',
+        borderRadius: '0 0 18px 18px',
       }}
     >
       {/* Empty box for left spacing (if needed) */}
@@ -32,10 +35,33 @@ const Header = () => {
         }}
       />
 
-      {/* Calendar Icon to the Right */}
-      <Box>
-        <IconButton>
-          <CalendarMonthIcon sx={{ color: "white", fontSize: "36px" }} />
+      {/* Calendar Icon and Text absolutely positioned to the right */}
+      <Box
+        sx={{
+          position: 'absolute',
+          right: 24,
+          top: 0,
+          height: '100%',
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        <IconButton
+          sx={{
+            transition: 'background 0.2s',
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 1,
+            '&:hover': {
+              background: '#eaf3ff',
+            },
+          }}
+        >
+          <Typography sx={{ fontSize: 16, color: '#222', fontWeight: 500 }}>
+            תורים עתידיים
+          </Typography>
+          <CalendarMonthIcon sx={{ color: '#000', fontSize: '36px', transition: 'color 0.2s', '&:hover': { color: '#666' } }} />
         </IconButton>
       </Box>
     </Box>
