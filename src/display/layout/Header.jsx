@@ -1,8 +1,9 @@
 ﻿import React from 'react';
 import { Box, IconButton, Typography } from '@mui/material';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import ROUTES from '../router/routesModule';
 
-const Header = () => {
+const Header = ({ navigate }) => {
   return (
     <Box
       sx={{
@@ -24,6 +25,7 @@ const Header = () => {
 
       {/* Centered Logo */}
       <img
+        onClick={() => navigate(ROUTES.HOME)}
         src="/trimtimelogo.png"
         alt="TrimTime Logo"
         style={{
@@ -31,9 +33,11 @@ const Header = () => {
           width: 'auto',
           objectFit: "contain",
           display: 'block',
-          transform: "scale(2.5)"
+          transform: "scale(2.5)",
+          cursor: "pointer"
         }}
       />
+
 
       {/* Calendar Icon and Text absolutely positioned to the right */}
       <Box
